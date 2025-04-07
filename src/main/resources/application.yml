@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: payment
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nakup-payment
+    username: postgres
+    password: zxca
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8096
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8090/eureka
+    register-with-eureka: true
+  instance:
+    app-name: payment-service
+    instance-id: ${spring.application.name}:${random.value}
