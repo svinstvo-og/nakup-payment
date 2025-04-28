@@ -18,8 +18,5 @@ public class PaymentDetailsRequest {
     private Long userId;
     private BigDecimal amount;
     private String currency;
-
-    //Imitation of third-party payment API
-    @JsonProperty("success")
     private Boolean determinedSuccess;
 }
