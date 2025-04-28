@@ -3,8 +3,10 @@ package nakup.payment.service;
 import jakarta.transaction.Transactional;
 import nakup.payment.dto.PaymentDetailsRequest;
 import nakup.payment.model.Payment;
+import nakup.payment.model.event.PaymentCompletedEvent;
 import nakup.payment.model.event.PaymentInitiatedEvent;
 import nakup.payment.repository.PaymentRepository;
+import nakup.payment.service.event.PaymentCompletedProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private PaymentCompletedProducer paymentCompletedProducer;
 
     @Transactional
     public Payment pay(PaymentDetailsRequest request) {
@@ -60,5 +65,7 @@ public class PaymentService {
         else {
             System.out.println("Payment failed, order-id: " + payment.getOrderId());
         }
+
+        paymentCompletedProducer.publishPaymentCompletedEvent(new PaymentCompletedEvent(event.orderId(), payment.getSuccess()));
     }
 }
